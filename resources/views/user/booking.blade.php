@@ -125,7 +125,7 @@
             <!-- Package Detail Card -->
             <div class="card full-width-card">
                 <div class="pkg-header">
-                    <img src="{{ $selectedPackage->image ?? 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400' }}" alt="Package" class="pkg-image">
+                    <img src="{{ $selectedPackage->image ? asset('storage/' . $selectedPackage->image) : 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400' }}" alt="Package" class="pkg-image">
                     <div class="pkg-info">
                         <h2 class="pkg-name">{{ $selectedPackage->name }}</h2>
                         <ul class="pkg-details">
