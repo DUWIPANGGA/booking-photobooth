@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Gallery - ' . ucwords(str_replace('-', ' ', $theme)))
+@section('title', 'Gallery - ' . $category->name)
 
 @push('styles')
 <style>
@@ -72,6 +72,53 @@
         object-fit: cover;
     }
 
+    /* Lightbox */
+    .lightbox-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .lightbox-overlay.active {
+        display: flex;
+    }
+    .lightbox-overlay img {
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity: 1; }
+
+    .empty-gallery {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+    .empty-gallery i {
+        font-size: 3rem;
+        margin-bottom: 16px;
+        opacity: 0.4;
+        display: block;
+    }
+
     @media (max-width: 768px) {
         .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .btn-close-gallery { top: 20px; right: 20px; width: 36px; height: 36px; font-size: 1.4rem; }
@@ -86,28 +133,45 @@
         <i class="fas fa-times"></i>
     </a>
 
-    <h1 class="theme-header-title">{{ ucwords(str_replace('-', ' ', $theme)) }}</h1>
+    <h1 class="theme-header-title">{{ $category->name }}</h1>
 
     <div class="photo-grid">
-        @php
-            // Use a specific dummy image based on the theme or a default one
-            $dummyImages = [
-                'teater-vibes'   => 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=600',
-                '3d-spotlight'   => 'https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=600',
-                'blue-vibes'     => 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=600',
-                'basic'          => 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=600',
-                'homey'          => 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?q=80&w=600',
-                'elevator-vibes' => 'https://plus.unsplash.com/premium_photo-1661601669467-36e395781a7d?q=80&w=600',
-            ];
-            $currentImg = $dummyImages[$theme] ?? 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=600';
-        @endphp
-
-        {{-- Show 6 dummy photos as in image 3 --}}
-        @for($i = 0; $i < 6; $i++)
-            <div class="photo-item">
-                <img src="{{ $currentImg }}" alt="Gallery Image" class="photo-img">
+        @forelse($category->photos as $photo)
+            <div class="photo-item" onclick="openLightbox('{{ asset('storage/' . $photo->image) }}')">
+                <img src="{{ asset('storage/' . $photo->image) }}" alt="{{ $category->name }}" class="photo-img" loading="lazy">
             </div>
-        @endfor
+        @empty
+            <div class="empty-gallery">
+                <i class="fas fa-images"></i>
+                <p style="font-size: 1.1rem;">Belum ada foto di galeri ini.</p>
+                <a href="{{ route('galeri') }}" style="color: var(--primary); font-weight:600; margin-top:8px; display:inline-block;">
+                    ← Kembali ke Galeri
+                </a>
+            </div>
+        @endforelse
     </div>
 </section>
+
+{{-- Lightbox --}}
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('active')">&times;</span>
+    <img id="lightbox-img" src="" alt="Foto Galeri">
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+    function closeLightbox(e) {
+        if (e.target === document.getElementById('lightbox')) {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+    });
+</script>
+@endpush
