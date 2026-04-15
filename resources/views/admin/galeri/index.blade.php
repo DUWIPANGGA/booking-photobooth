@@ -522,38 +522,59 @@
             if (input.files && input.files.length > 0) {
                 const addBtn = input.closest('label');
                 
+                let oversizedFiles = 0;
+                const MAX_TOTAL_SIZE = 8 * 1024 * 1024; // 8MB batas aman server
+                
                 // Add new files to our DataTransfer object
                 Array.from(input.files).forEach((file) => {
-                    selectedFiles.items.add(file);
-                    
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const tempId = 'new-' + Math.random().toString(36).substr(2, 9);
-                        const card = document.createElement('div');
-                        card.className = 'photo-item-modal';
-                        card.id = tempId;
-                        card.innerHTML = `
-                            <img src="${e.target.result}" style="opacity: 0.8; border: 2px solid #27AE60;">
-                            <button type="button" class="btn-trash-modal" onclick="removeNewPhoto('${tempId}', '${file.name}')">
-                                <i class="fas fa-times" style="color: #e74c3c"></i>
-                            </button>
-                            <div class="photo-num-label" style="background: #27AE60;">Baru</div>
-                        `;
-                        photoGrid.insertBefore(card, addBtn);
+                    let currentTotalSize = 0;
+                    for(let i = 0; i < selectedFiles.files.length; i++) {
+                        currentTotalSize += selectedFiles.files[i].size;
                     }
-                    reader.readAsDataURL(file);
+                    
+                    // Cek jika menambah file ini akan melebihi 8MB
+                    if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
+                        oversizedFiles++;
+                    } else {
+                        selectedFiles.items.add(file);
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const tempId = 'new-' + Math.random().toString(36).substr(2, 9);
+                            const card = document.createElement('div');
+                            card.className = 'photo-item-modal';
+                            card.id = tempId;
+                            card.innerHTML = `
+                                <img src="${e.target.result}" style="opacity: 0.8; border: 2px solid #27AE60;">
+                                <button type="button" class="btn-trash-modal" onclick="removeNewPhoto('${tempId}', '${file.name}')">
+                                    <i class="fas fa-times" style="color: #e74c3c"></i>
+                                </button>
+                                <div class="photo-num-label" style="background: #27AE60;">Baru</div>
+                            `;
+                            photoGrid.insertBefore(card, addBtn);
+                        }
+                        reader.readAsDataURL(file);
+                    }
                 });
 
                 // Update the file input with ALL accumulated files
                 input.files = selectedFiles.files;
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Foto Ditambahkan',
-                    text: `${input.files.length} foto siap diunggah.`,
-                    timer: 1000,
-                    showConfirmButton: false
-                });
+                if (oversizedFiles > 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Batas Upload Tercapai',
+                        text: `${oversizedFiles} foto gagal ditambah karena total ukuran melebihi batas server (8MB). Silakan simpan dulu, lalu tambah sisanya.`,
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Foto Ditambahkan',
+                        text: `${input.files.length} foto siap diunggah.`,
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+                }
             }
         }
 

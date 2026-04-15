@@ -138,28 +138,35 @@
         <div class="galeri-divider"></div>
 
         <div class="galeri-grid">
-            @php
-                $themes = [
-                    ['name' => 'Teater Vibes', 'slug' => 'teater-vibes', 'img' => 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=600'],
-                    ['name' => '3D Spotlight', 'slug' => '3d-spotlight', 'img' => 'https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=600'],
-                    ['name' => 'Blue Vibes', 'slug' => 'blue-vibes', 'img' => 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=600'],
-                    ['name' => 'Basic', 'slug' => 'basic', 'img' => 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=600'],
-                    ['name' => 'Homey', 'slug' => 'homey', 'img' => 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?q=80&w=600'],
-                    ['name' => 'Elevator Vibes', 'slug' => 'elevator-vibes', 'img' => 'https://images.unsplash.com/photo-1541339907198-e08759df9a73?q=80&w=600'],
-                ];
-            @endphp
-
-            @foreach($themes as $theme)
-                <a href="{{ route('galeri.show', $theme['slug']) }}" class="theme-card">
+            @forelse($categories as $category)
+                <a href="{{ route('galeri.show', $category->id) }}" class="theme-card">
                     <div class="theme-img-wrapper">
-                        <img src="{{ $theme['img'] }}" alt="{{ $theme['name'] }}" class="theme-img">
+                        @if($category->image)
+                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="theme-img">
+                        @elseif($category->photos->first())
+                            <img src="{{ asset('storage/' . $category->photos->first()->image) }}" alt="{{ $category->name }}" class="theme-img">
+                        @else
+                            <div class="theme-img" style="background: linear-gradient(135deg, #d4a0b0 0%, #8b5e6a 100%); display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-images" style="font-size:3rem; color:rgba(255,255,255,0.5);"></i>
+                            </div>
+                        @endif
                         <div class="theme-overlay">
-                            <span class="view-gallery-btn">View Gallery <i class="fas fa-arrow-right"></i></span>
+                            <span class="view-gallery-btn">
+                                View Gallery <i class="fas fa-arrow-right"></i>
+                                @if($category->photos_count > 0)
+                                    <small style="opacity:0.8;">({{ $category->photos_count }} foto)</small>
+                                @endif
+                            </span>
                         </div>
                     </div>
-                    <div class="theme-name">{{ $theme['name'] }}</div>
+                    <div class="theme-name">{{ $category->name }}</div>
                 </a>
-            @endforeach
+            @empty
+                <div style="grid-column: 1/-1; text-align:center; padding: 60px 20px; color: var(--text-muted);">
+                    <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.4; display:block;"></i>
+                    <p style="font-size: 1.1rem;">Belum ada galeri tersedia.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>

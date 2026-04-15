@@ -33,11 +33,13 @@ Route::get('/paket', function() {
 })->name('user.paket');
 
 Route::get('/galeri', function () {
-    return view('galeri.index');
+    $categories = \App\Models\Category::withCount('photos')->latest()->get();
+    return view('galeri.index', compact('categories'));
 })->name('galeri');
 
-Route::get('/galeri/{theme}', function ($theme) {
-    return view('galeri.show', ['theme' => $theme]);
+Route::get('/galeri/{category}', function (\App\Models\Category $category) {
+    $category->load('photos');
+    return view('galeri.show', compact('category'));
 })->name('galeri.show');
 
 Route::get('/cara-transaksi', function () {

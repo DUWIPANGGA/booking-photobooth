@@ -37,11 +37,13 @@ class AdminCategoryController extends Controller
         // Handle inner photos if provided
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photoFile) {
-                $path = $photoFile->store('gallery', 'public');
-                GalleryPhoto::create([
-                    'category_id' => $category->id,
-                    'image'       => $path,
-                ]);
+                if ($photoFile && $photoFile->isValid()) {
+                    $path = $photoFile->store('gallery', 'public');
+                    GalleryPhoto::create([
+                        'category_id' => $category->id,
+                        'image'       => $path,
+                    ]);
+                }
             }
         }
 
@@ -85,11 +87,13 @@ class AdminCategoryController extends Controller
         // Handle inner photos if provided
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photoFile) {
-                $path = $photoFile->store('gallery', 'public');
-                GalleryPhoto::create([
-                    'category_id' => $category->id,
-                    'image'       => $path,
-                ]);
+                if ($photoFile && $photoFile->isValid()) {
+                    $path = $photoFile->store('gallery', 'public');
+                    GalleryPhoto::create([
+                        'category_id' => $category->id,
+                        'image'       => $path,
+                    ]);
+                }
             }
         }
 
