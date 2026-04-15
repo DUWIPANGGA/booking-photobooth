@@ -71,7 +71,7 @@ class BookingController extends Controller
         }
 
         $package = Package::find($validated['package_id']);
-        $duration = $package->duration;
+        $duration = (int) $package->duration;
         $totalPrice = $package->price;
 
         // Add-ons logic
