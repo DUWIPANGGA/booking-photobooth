@@ -122,7 +122,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        if ($booking->user_id !== Auth::id()) abort(403);
+        if ($booking->user_id != Auth::id()) abort(403);
         
         return view('user.booking_detail', compact('booking'));
     }
@@ -140,7 +140,7 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        if ($booking->user_id !== Auth::id()) abort(403);
+        if ($booking->user_id != Auth::id()) abort(403);
         
         // Optionally only allow cancellation if status is pending
         if ($booking->status !== 'pending') {
