@@ -140,7 +140,7 @@
                 <ul class="detail-list">
                     <li>Nama: {{ $booking->user->name }}</li>
                     <li>Tanggal: {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}</li>
-                    <li>Jam: {{ \Carbon\Carbon::parse($booking->booking_time)->format('H.i') }}-{{ \Carbon\Carbon::parse($booking->booking_time)->addMinutes($booking->duration)->format('H.i') }}</li>
+                    <li>Jam: {{ \Carbon\Carbon::parse($booking->booking_time)->format('H.i') }}-{{ \Carbon\Carbon::parse($booking->booking_time)->addMinutes((int)$booking->duration)->format('H.i') }}</li>
                     <li>Paket: {{ $booking->package->name }}</li>
                     <li>Durasi: {{ $booking->duration }} Menit</li>
                     <li>Jumlah Orang: {{ $booking->extra_persons ? $booking->package->max_person . ' + 2' : $booking->package->max_person }} Orang</li>
