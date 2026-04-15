@@ -87,12 +87,12 @@ class BookingController extends Controller
         $startTime = Carbon::createFromFormat('Y-m-d H:i', $validated['booking_date'] . ' ' . $validated['booking_time']);
         $endTime = (clone $startTime)->addMinutes($duration);
 
-        // Conflict check (Postgres compatible)
+        // Conflict check (MySQL/MariaDB compatible)
         $conflict = Booking::where('booking_date', $validated['booking_date'])
             ->whereIn('status', ['pending', 'confirmed'])
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->whereRaw("booking_time < ?", [$endTime->format('H:i:s')])
-                      ->whereRaw("(booking_time + (duration * interval '1 minute')) > ?", [$startTime->format('H:i:s')]);
+                      ->whereRaw("ADDTIME(booking_time, SEC_TO_TIME(duration * 60)) > ?", [$startTime->format('H:i:s')]);
             })->exists();
 
         if ($conflict) {

@@ -208,7 +208,7 @@
                                 <div class="time-slot-btn">
                                     <i class="fas fa-clock"></i>
                                     <div>
-                                        <span>{{ \Carbon\Carbon::parse($slot->booking_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($slot->booking_time)->addMinutes($slot->duration)->format('H:i') }} WIB</span>
+                                        <span>{{ \Carbon\Carbon::parse($slot->booking_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($slot->booking_time)->addMinutes((int)$slot->duration)->format('H:i') }} WIB</span>
                                         <span class="slot-label">Sudah Dipesan</span>
                                     </div>
                                 </div>
