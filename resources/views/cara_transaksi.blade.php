@@ -11,26 +11,7 @@
         min-height: calc(100vh - 130px);
     }
 
-    .btn-kembali-trans {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: white;
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        color: var(--primary);
-        text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 30px;
-        float: left;
-        transition: var(--transition);
-    }
-    .btn-kembali-trans:hover {
-        background: var(--primary);
-        color: white;
-    }
+
 
     .trans-title {
         font-family: 'Playfair Display', serif;
@@ -174,8 +155,9 @@
 @section('content')
 <section class="trans-section">
     <div class="container" style="max-width: 1200px; margin: 0 auto; overflow: hidden;">
-        <a href="{{ route('home') }}" class="btn-kembali-trans">
-            <i class="fas fa-arrow-left"></i> Kembali
+        <a href="{{ route('home') }}" class="btn-kembali-wrapper" style="float: left;">
+            <span class="btn-kembali-circle"><i class="fas fa-arrow-left"></i></span>
+            <span class="text-kembali">Kembali</span>
         </a>
 
         <h1 class="trans-title">Cara Transaksi</h1>

@@ -144,8 +144,9 @@
             <div class="empty-gallery">
                 <i class="fas fa-images"></i>
                 <p style="font-size: 1.1rem;">Belum ada foto di galeri ini.</p>
-                <a href="{{ route('galeri') }}" style="color: var(--primary); font-weight:600; margin-top:8px; display:inline-block;">
-                    ← Kembali ke Galeri
+                <a href="{{ route('galeri') }}" class="btn-kembali-wrapper" style="margin-top: 15px;">
+                    <span class="btn-kembali-circle"><i class="fas fa-arrow-left"></i></span>
+                    <span class="text-kembali">Kembali ke Galeri</span>
                 </a>
             </div>
         @endforelse

@@ -7,13 +7,7 @@
     .main-container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
     
     .back-nav { margin-bottom: 24px; }
-    .btn-kembali {
-        display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;
-        background: white; border: 1px solid var(--border-color); border-radius: 20px;
-        color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: 500;
-        transition: 0.3s;
-    }
-    .btn-kembali:hover { background: var(--bg-light); transform: translateX(-5px); }
+
 
     .page-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--primary-dark); margin-bottom: 40px; }
 
@@ -109,8 +103,9 @@
 @section('content')
 <div class="main-container">
     <div class="back-nav">
-        <a href="{{ route('home') }}" class="btn-kembali">
-            <i class="fas fa-arrow-left"></i> Kembali
+        <a href="{{ route('home') }}" class="btn-kembali-wrapper">
+            <span class="btn-kembali-circle"><i class="fas fa-arrow-left"></i></span>
+            <span class="text-kembali">Kembali</span>
         </a>
     </div>
 

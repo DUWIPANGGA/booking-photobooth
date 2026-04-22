@@ -79,6 +79,42 @@
 
         .main-content { flex: 1; }
         .footer { background: var(--nav-bg); color: rgba(255,255,255,0.7); padding: 25px; text-align: center; font-size: 0.8rem; }
+        
+        /* Global Style for Kembali Button */
+        .btn-kembali-wrapper {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(128, 64, 77, 0.08);
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            transition: var(--transition, 0.3s);
+        }
+        .btn-kembali-wrapper:hover {
+            background: rgba(128, 64, 77, 0.15);
+        }
+        .btn-kembali-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid #80404D;
+            color: #80404D;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            background: transparent;
+            transition: var(--transition, 0.3s);
+        }
+        .text-kembali {
+            color: #80404D;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
     </style>
     @stack('styles')
 </head>
